@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server/index.mjs",
-    "start:watch": "node server/index.mjs --watch"
+    "start:watch": "node --watch server/index.mjs"
   },
   "repository": {
     "type": "git",
