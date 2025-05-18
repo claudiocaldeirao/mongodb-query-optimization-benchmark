@@ -20,7 +20,7 @@ This document presents the comparison of load test results for each `/orders?sta
 | 3     | ✅ Completed | Handled the load normally | Response times acceptable under configured load |
 | 4     | ✅ Completed | Extremely fast responses  | Performed significantly faster than stage 3     |
 
-## Artillery.io Dashboard
+## 📈 Artillery.io Dashboard
 
 #### Stage01
 
@@ -64,3 +64,25 @@ scenarios:
       - get:
           url: "/orders/{customerId}?stage={stageId}"
 ```
+
+## 🧪 Running the benchmark again but increasing timeout to get stage01 and stage02 response time
+
+Running the same load tests but now with an aditional parameter to increse timeout only on stages 01 and 02:
+
+```yaml
+http:
+  timeout: 60
+```
+
+## 📈 Results
+
+#### Stage01
+
+Still failed on every request.
+
+![stage01](../images/stage01-load-timeout60.png)
+
+#### Stage02
+
+137 out of 150 requests completed successfully, but really poor performance.
+![stage02](../images/stage02-load-timeout60.png)
