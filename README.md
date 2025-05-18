@@ -82,6 +82,7 @@ sh artillery/run_load_test.sh
 ## 📈 Actual Results
 
 - This [document](docs/single_query_results.md), contains the comparison in a single query test.
+- This [document](docs/artillery_load_benchmark.md), contains the comparison using load tests wt artillery.
 
 ## 📂 Project Structure
 
