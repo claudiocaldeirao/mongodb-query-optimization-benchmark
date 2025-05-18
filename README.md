@@ -94,30 +94,10 @@ Stage 4: Best performance with minimal aggregation and direct document reads.
 
 ```
 
-## MongoDB Aggregation Pipeline: Recommended Stage Order
+## 📚 About MongoDB Features
 
-| Order | Stage                 | Purpose                                                                 |
-| ----- | --------------------- | ----------------------------------------------------------------------- |
-| 1     | `$match`              | Filter documents as early as possible — ideally on **indexed** fields.  |
-| 2     | `$project`            | Include/exclude only necessary fields to reduce document size.          |
-| 3     | `$unwind`             | Expand arrays, but only **after filtering and projection**.             |
-| 4     | `$lookup`             | Perform joins after reducing input volume with `$match` and `$project`. |
-| 5     | `$addFields` / `$set` | Add computed fields or enrich data as needed.                           |
-| 6     | `$group`              | Perform aggregation (sum, count, etc.) after data has been trimmed.     |
-| 7     | `$sort`               | Sort results only after grouping or filtering.                          |
-| 8     | `$limit` / `$skip`    | Apply for pagination or result size control **after sorting**.          |
-
-### Notes
-
-- (`$match`) **early data reduction** ensures only relevant documents flow through the rest.
-
-- (`$project`) trims unnecessary fields to reduce memory footprint.
-
-- (`$unwind`) and (`$lookup`) are **computationally expensive**, so you want them after filtering. Same for projects.
-
-- (`$group`) can be costly, so reducing input volume beforehand helps a lot.
-
-- (`$sort`) is also expensive and works best on **indexed fields**, and should be done after grouping unless absolutely necessary before.
+- [Preffered stage order into aggregation pipelines](docs/mongo_aggregation_pipeline_order.md)
+- [About Compond indexes](docs/mongodb_compound_indexes.md)
 
 ## 📄 License
 
