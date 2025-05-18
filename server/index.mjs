@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/benchmark";
 
-app.get("/", async (req, res) => {
+app.get("/orders", async (req, res) => {
   const client = new MongoClient(mongoUri);
   const stageIndex = req.params.stage || 1;
 

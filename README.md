@@ -55,6 +55,12 @@ The API will be available at:
 GET /orders
 ```
 
+## 🧪 Load Testing with Artillery
+
+```bash
+artillery run artillery/artillery-config.yml
+```
+
 ## 📈 Expected Results
 
 Stage 1: High latency due to unoptimized joins.
@@ -79,7 +85,7 @@ Stage 4: Best performance with minimal aggregation and direct document reads.
 │   ├── stage3.mjs        # With indexes
 │   └── stage4.mjs        # With restructured data
 ├── artillery/
-│   └── tests.yml        # Artillery config (one per stage)
+│   └── artillery-config.yml    # Artillery config (one per stage)
 └── README.md
 
 ```
