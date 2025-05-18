@@ -175,7 +175,9 @@ async function insertData(uri, { dbName, dataset }) {
         orderItems
       );
       await db.collection("orders_summary").insertMany(ordersSummary);
-      await db.collection("orders_summary").createIndex({ customerName: 1 });
+      await db
+        .collection("orders_summary")
+        .createIndex({ "customerId.buffer": 1, totalRevenue: -1 });
     }
   } finally {
     await client.close();
