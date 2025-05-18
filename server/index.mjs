@@ -1,17 +1,18 @@
 import express from "express";
 import { MongoClient } from "mongodb";
+import { BadAggregation } from "./stages/stage01.mjs";
 
 const app = express();
 const port = 3000;
-const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/shopDB";
+const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/benchmark";
 
 app.get("/", async (req, res) => {
   const client = new MongoClient(mongoUri);
   try {
     await client.connect();
     const db = client.db();
-    const count = await db.collection("customers").countDocuments();
-    res.send(`Connected to MongoDB. Document count: ${count}`);
+    const docs = await BadAggregation(db);
+    res.send(docs);
   } catch (err) {
     res.status(500).send("Error connecting to MongoDB: " + err.message);
   } finally {
