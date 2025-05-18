@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Benchmarking MongoDB query performance across different optimization stages: unoptimized queries, optimized aggregations, indexed collections, and denormalized data models.",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "start": "npm run start"
+    "start": "node server/index.mjs"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,10 @@
   "bugs": {
     "url": "https://github.com/claudiocaldeirao/mongodb-query-optimization-benchmark/issues"
   },
-  "homepage": "https://github.com/claudiocaldeirao/mongodb-query-optimization-benchmark#readme"
+  "homepage": "https://github.com/claudiocaldeirao/mongodb-query-optimization-benchmark#readme",
+  "dependencies": {
+    "@faker-js/faker": "^9.8.0",
+    "express": "^5.1.0",
+    "mongodb": "^6.16.0"
+  }
 }

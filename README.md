@@ -70,14 +70,14 @@ Stage 4: Best performance with minimal aggregation and direct document reads.
 ```bash
 .
 ├── seed
-│   └── index.js         # Script to generate and insert test data
-├── src
-│   └── index.js         # Express API with a single route
+│   └── index.mjs         # Script to generate and insert test data
+├── server
+│   └── index.mjs         # Express API with a single route
 ├── stages/
-│   ├── stage1.js        # Unoptimized query
-│   ├── stage2.js        # Optimized aggregation
-│   ├── stage3.js        # With indexes
-│   └── stage4.js        # With restructured data
+│   ├── stage1.mjs        # Unoptimized query
+│   ├── stage2.mjs        # Optimized aggregation
+│   ├── stage3.mjs        # With indexes
+│   └── stage4.mjs        # With restructured data
 ├── artillery/
 │   └── tests.yml        # Artillery config (one per stage)
 └── README.md

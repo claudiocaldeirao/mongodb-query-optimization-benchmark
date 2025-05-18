@@ -1,0 +1,49 @@
+services:
+  mongo:
+    image: mongo:7.0
+    ports:
+      - 27017:27017
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    healthcheck:
+      test: [
+        "CMD",
+        "mongosh",
+        "--quiet",
+        "--eval", "db.runCommand({ ping: 1 })"
+      ]
+      interval: 10s
+      timeout: 20s
+      retries: 5
+      start_period: 60s
+    volumes:
+      - mongodata:/data/db
+
+  api:
+    build:
+      context: .
+      dockerfile: server/dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/benchmark
+
+  seed:
+    build:
+      context: .
+      dockerfile: seed/dockerfile
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/benchmark
+
+volumes:
+  mongodata:
+    driver: local

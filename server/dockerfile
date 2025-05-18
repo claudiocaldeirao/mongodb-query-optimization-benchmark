@@ -1,0 +1,11 @@
+FROM node:20-alpine
+
+WORKDIR /server
+
+COPY package.json ./
+COPY package-lock.json ./
+COPY server/index.mjs ./
+
+RUN npm ci
+
+CMD ["node", "index.mjs"]

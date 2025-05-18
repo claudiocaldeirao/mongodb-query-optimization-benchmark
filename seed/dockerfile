@@ -1,0 +1,11 @@
+FROM node:20-alpine
+
+WORKDIR /seed
+
+COPY package.json ./
+COPY package-lock.json ./
+COPY seed/index.mjs ./
+
+RUN npm ci
+
+CMD ["node", "index.mjs"]
