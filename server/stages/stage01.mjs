@@ -1,4 +1,4 @@
-export async function BadAggregation(db) {
+export async function BadAggregation(db, customerId) {
   const pipeline = [
     // 1. Lookup customer details
     {
@@ -33,7 +33,7 @@ export async function BadAggregation(db) {
     },
     { $unwind: "$product" },
 
-    // 4. Lookup shipping address
+    // 4. Lookup shipping address (not used in final object, could be removed)
     {
       $lookup: {
         from: "shipping_addresses",
@@ -44,7 +44,7 @@ export async function BadAggregation(db) {
     },
     { $unwind: "$shippingAddress" },
 
-    // 5. Lookup payment transaction
+    // 5. Lookup payment transaction (not used in final object, could be removed)
     {
       $lookup: {
         from: "payment_transactions",
@@ -55,7 +55,14 @@ export async function BadAggregation(db) {
     },
     { $unwind: "$payment" },
 
-    // Project only needed fields
+    // 6. Match orders for the given customer (should be done earlier)
+    {
+      $match: {
+        "customer._id.buffer": customerId,
+      },
+    },
+
+    // 7. Project only needed fields
     {
       $project: {
         orderId: "$_id",
@@ -69,7 +76,7 @@ export async function BadAggregation(db) {
       },
     },
 
-    // Group by customer and product
+    // 8. Group by customer and product (could be merged with the previous stage)
     {
       $group: {
         _id: {
@@ -81,7 +88,7 @@ export async function BadAggregation(db) {
       },
     },
 
-    // Sort by revenue descending
+    // 9. Sort by revenue descending
     {
       $sort: { totalRevenue: -1 },
     },

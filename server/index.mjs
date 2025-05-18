@@ -23,15 +23,18 @@ const databases = {
   4: "stage04",
 };
 
-app.get("/orders", async (req, res) => {
+app.get("/orders/:customerId", async (req, res) => {
   const client = new MongoClient(mongoUri);
-  const stageIndex = req.params.stage || 1;
+  const stageIndex = req.query.stage || 1;
   const dbName = databases[stageIndex];
+
+  const customerIdBase64 = req.params.customerId;
+  const customerId = Buffer.from(customerIdBase64, "base64");
 
   try {
     await client.connect();
     const db = client.db(dbName);
-    const docs = await stages[stageIndex](db);
+    const docs = await stages[stageIndex](db, customerId);
     res.send(docs);
   } catch (err) {
     res.status(500).send("Error connecting to MongoDB: " + err.message);
