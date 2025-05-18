@@ -40,7 +40,7 @@ npm install
 ### 3. Seed the database with test data
 
 ```bash
-node seed.js  # Inserts random documents into all collections
+node seed/index.mjs  # Inserts random documents into all collections
 ```
 
 ### 4. Start the server
@@ -52,7 +52,7 @@ npm start
 The API will be available at:
 
 ```bash
-GET /orders
+GET /orders/:customerId/stage={stageId}
 ```
 
 ## 🧪 Load Testing with Artillery
