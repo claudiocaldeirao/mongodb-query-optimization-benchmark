@@ -7,7 +7,6 @@ const numDocs = 50000;
 const __filename = fileURLToPath(import.meta.url);
 const uri = "mongodb://localhost:27017";
 const stageDbNames = ["stage01", "stage02", "stage03", "stage04"];
-const stagesWithIndexes = ["stage03", "stage04"];
 const customers = [];
 const products = [];
 const shippingAddresses = [];
@@ -92,6 +91,48 @@ function generateFakeData(numDocs) {
   }
 }
 
+function buildOrdersSummary(customers, products, orders, orderItems) {
+  const customerMap = new Map(customers.map((c) => [c._id, c]));
+  const productMap = new Map(products.map((p) => [p._id, p]));
+  const itemsMap = new Map();
+  const summaryMap = new Map();
+
+  for (const item of orderItems) {
+    if (!itemsMap.has(item.orderId)) {
+      itemsMap.set(item.orderId, []);
+    }
+
+    itemsMap.get(item.orderId).push(item);
+  }
+
+  for (const order of orders) {
+    const customer = customerMap.get(order.customerId);
+    if (!customer) continue;
+
+    const items = itemsMap.get(order._id);
+    if (!items) continue;
+
+    for (const item of items) {
+      const product = productMap.get(item.productId);
+      if (!product) continue;
+      const key = `${customer.name}::${product.name}`;
+
+      const current = summaryMap.get(key) || {
+        customerId: customer._id,
+        customerName: customer.name,
+        productName: product.name,
+        totalQuantity: 0,
+        totalRevenue: 0,
+      };
+      current.totalQuantity += item.quantity;
+      current.totalRevenue += item.quantity * item.unitPrice;
+      summaryMap.set(key, current);
+    }
+  }
+
+  return Array.from(summaryMap.values());
+}
+
 async function insertData(uri, { dbName, dataset }) {
   const client = new MongoClient(uri);
   const {
@@ -105,21 +146,36 @@ async function insertData(uri, { dbName, dataset }) {
 
   try {
     await client.connect();
-
     await client.db(dbName).dropDatabase();
-
     const db = client.db(dbName);
-    await db.collection("customers").insertMany(customers);
-    await db.collection("products").insertMany(products);
-    await db.collection("shipping_addresses").insertMany(shippingAddresses);
-    await db.collection("payment_transactions").insertMany(paymentTransactions);
-    await db.collection("orders").insertMany(orders);
-    await db.collection("order_items").insertMany(orderItems);
+
+    if (dbName !== "stage04") {
+      await db.collection("customers").insertMany(customers);
+      await db.collection("products").insertMany(products);
+      await db.collection("shipping_addresses").insertMany(shippingAddresses);
+      await db
+        .collection("payment_transactions")
+        .insertMany(paymentTransactions);
+      await db.collection("orders").insertMany(orders);
+      await db.collection("order_items").insertMany(orderItems);
+    }
 
     // indexes
-    if (stagesWithIndexes.includes(dbName)) {
+    if (dbName === "stage03") {
       await db.collection("orders").createIndex({ customerId: 1 });
       await db.collection("order_items").createIndex({ orderId: 1 });
+    }
+
+    if (dbName === "stage04") {
+      console.log("Generating orders summary...");
+      const ordersSummary = buildOrdersSummary(
+        customers,
+        products,
+        orders,
+        orderItems
+      );
+      await db.collection("orders_summary").insertMany(ordersSummary);
+      await db.collection("orders_summary").createIndex({ customerName: 1 });
     }
   } finally {
     await client.close();

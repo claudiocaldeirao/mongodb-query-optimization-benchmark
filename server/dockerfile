@@ -5,6 +5,7 @@ WORKDIR /server
 COPY package.json ./
 COPY package-lock.json ./
 COPY server/index.mjs ./
+COPY server/stages ./stages
 
 RUN npm ci
 
