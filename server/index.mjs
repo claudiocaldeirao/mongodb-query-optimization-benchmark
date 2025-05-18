@@ -1,18 +1,36 @@
 import express from "express";
 import { MongoClient } from "mongodb";
 import { BadAggregation } from "./stages/stage01.mjs";
+import { ImpprovedAggregation } from "./stages/stage02.mjs";
+import { AggregationWithIndex } from "./stages/stage03.mjs";
+import { DenormalizedAggregation } from "./stages/stage04.mjs";
 
 const app = express();
 const port = 3000;
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
 
+const stages = {
+  1: BadAggregation,
+  2: ImpprovedAggregation,
+  3: AggregationWithIndex,
+  4: DenormalizedAggregation,
+};
+
+const databases = {
+  1: "stage01",
+  2: "stage02",
+  3: "stage03",
+  4: "stage04",
+};
+
 app.get("/orders", async (req, res) => {
   const client = new MongoClient(mongoUri);
   const stageIndex = req.params.stage || 1;
+  const dbName = databases[stageIndex];
 
   try {
     await client.connect();
-    const db = client.db("stage01");
+    const db = client.db(dbName);
     const docs = await stages[stageIndex](db);
     res.send(docs);
   } catch (err) {
@@ -25,7 +43,3 @@ app.get("/orders", async (req, res) => {
 app.listen(port, () => {
   console.log(`API listening on port ${port}`);
 });
-
-const stages = {
-  1: BadAggregation,
-};
