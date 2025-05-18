@@ -61,8 +61,12 @@ GET /orders
 # install globally
 npm install artillery -g
 
-# run
-artillery run artillery/artillery-config.yml
+# run test directly with artillery
+artillery run artillery/artillery-config.yml --output result.json
+
+# run load tests with script
+sh artillery/run_load_test.sh
+
 ```
 
 ## 📈 Expected Results

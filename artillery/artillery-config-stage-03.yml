@@ -1,0 +1,9 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 5
+scenarios:
+  - flow:
+      - get:
+          url: "/orders/aCogmfjQoe5xZd5a?stage=3"
