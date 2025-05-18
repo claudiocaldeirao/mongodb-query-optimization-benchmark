@@ -7,6 +7,7 @@ const numDocs = 50000;
 const __filename = fileURLToPath(import.meta.url);
 const uri = "mongodb://localhost:27017";
 const stageDbNames = ["stage01", "stage02", "stage03", "stage04"];
+const stagesWithIndexes = ["stage03", "stage04"];
 const customers = [];
 const products = [];
 const shippingAddresses = [];
@@ -114,6 +115,12 @@ async function insertData(uri, { dbName, dataset }) {
     await db.collection("payment_transactions").insertMany(paymentTransactions);
     await db.collection("orders").insertMany(orders);
     await db.collection("order_items").insertMany(orderItems);
+
+    // indexes
+    if (stagesWithIndexes.includes(dbName)) {
+      await db.collection("orders").createIndex({ customerId: 1 });
+      await db.collection("order_items").createIndex({ orderId: 1 });
+    }
   } finally {
     await client.close();
   }
