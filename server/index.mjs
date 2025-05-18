@@ -8,10 +8,12 @@ const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/benchmark";
 
 app.get("/", async (req, res) => {
   const client = new MongoClient(mongoUri);
+  const stageIndex = req.params.stage || 1;
+
   try {
     await client.connect();
     const db = client.db();
-    const docs = await BadAggregation(db);
+    const docs = await stages[stageIndex](db);
     res.send(docs);
   } catch (err) {
     res.status(500).send("Error connecting to MongoDB: " + err.message);
@@ -23,3 +25,7 @@ app.get("/", async (req, res) => {
 app.listen(port, () => {
   console.log(`API listening on port ${port}`);
 });
+
+const stages = {
+  1: BadAggregation,
+};
