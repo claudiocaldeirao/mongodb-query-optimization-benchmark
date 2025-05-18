@@ -67,13 +67,17 @@ artillery run artillery/artillery-config.yml
 
 ## 📈 Expected Results
 
-Stage 1: High latency due to unoptimized joins.
+**Stage 1:** High latency due to unoptimized joins.
 
-Stage 2: Moderate improvements from aggregation optimization.
+**Stage 2:** Moderate improvements from aggregation optimization.
 
-Stage 3: Significant gains from index usage.
+**Stage 3:** Significant gains from index usage.
 
-Stage 4: Best performance with minimal aggregation and direct document reads.
+**Stage 4:** Best performance with minimal aggregation and direct document reads.
+
+## 📈 Actual Results
+
+- This [document](docs/single_query_results.md), contains the comparison in a single query test.
 
 ## 📂 Project Structure
 
