@@ -32,17 +32,17 @@ services:
       mongo:
         condition: service_healthy
     environment:
-      - MONGO_URI=mongodb://mongo:27017/benchmark
+      - MONGO_URI=mongodb://mongo:27017
 
-  seed:
-    build:
-      context: .
-      dockerfile: seed/dockerfile
-    depends_on:
-      mongo:
-        condition: service_healthy
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/benchmark
+  # seed:
+  #   build:
+  #     context: .
+  #     dockerfile: seed/dockerfile
+  #   depends_on:
+  #     mongo:
+  #       condition: service_healthy
+  #   environment:
+  #     - MONGO_URI=mongodb://mongo:27017
 
 volumes:
   mongodata:

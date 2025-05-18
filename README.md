@@ -58,6 +58,10 @@ GET /orders
 ## 🧪 Load Testing with Artillery
 
 ```bash
+# install globally
+npm install artillery -g
+
+# run
 artillery run artillery/artillery-config.yml
 ```
 

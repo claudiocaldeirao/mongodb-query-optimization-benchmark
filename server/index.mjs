@@ -4,7 +4,7 @@ import { BadAggregation } from "./stages/stage01.mjs";
 
 const app = express();
 const port = 3000;
-const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017/benchmark";
+const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
 
 app.get("/orders", async (req, res) => {
   const client = new MongoClient(mongoUri);
@@ -12,7 +12,7 @@ app.get("/orders", async (req, res) => {
 
   try {
     await client.connect();
-    const db = client.db();
+    const db = client.db("stage01");
     const docs = await stages[stageIndex](db);
     res.send(docs);
   } catch (err) {
