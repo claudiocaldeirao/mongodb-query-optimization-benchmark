@@ -3,7 +3,7 @@ import { faker } from "@faker-js/faker";
 import { fileURLToPath } from "url";
 import { Worker, isMainThread, workerData } from "worker_threads";
 
-const numDocs = 1000;
+const numDocs = 50000;
 const __filename = fileURLToPath(import.meta.url);
 const uri = "mongodb://localhost:27017";
 const stageDbNames = ["stage01", "stage02", "stage03", "stage04"];
